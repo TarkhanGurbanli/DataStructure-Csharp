@@ -1,0 +1,262 @@
+﻿namespace DataStructureAll.DoublyLinkedListProject
+{
+    public class DoublyLinkedList
+    {
+        private Node head;
+        private Node tail;
+        private int length;
+
+        public DoublyLinkedList()
+        {
+            head = null;
+            tail = null;
+            length = 0;
+        }
+
+        public DoublyLinkedList(int data)
+        {
+            Node newNode = new Node(data);
+            head = newNode;
+            tail = newNode;
+            length = 1;
+        }
+
+        //DoublyLinkedList-de element(node) elave etmek
+        public void AppendList(int data)
+        {
+            Node newNode = new Node(data);
+
+            if (length == 0)
+            {
+                head = newNode;
+                tail = newNode;
+            }
+            else
+            {
+                tail.next = newNode;
+                newNode.prev = tail;
+                tail = newNode;
+            }
+            length++;
+        }
+
+        //DoublyLinkedList-in basina  element(node) elave etmek
+        public void AddFirst(int data)
+        {
+            Node newNode = new Node(data);
+
+            if (length == 0)
+            {
+                head = newNode;
+                tail = newNode;
+            }
+            else
+            {
+                newNode.next = head;
+                head.prev = newNode;
+                head = newNode;
+            }
+            length++;
+        }
+
+        //DoublyLinkedList-in son elementini(node) silmek
+        public Node DeleteLastNode()
+        {
+            Node temp = tail;
+
+            if (length == 0)
+            {
+                return null;
+            }
+
+            if (length == 1)
+            {
+                head = null;
+                tail = null;
+                length--;
+                return temp;
+            }
+
+            tail = tail.prev;
+            tail.next = null;
+            temp.prev = null;
+            length--;
+            return temp;
+        }
+
+        //DoublyLinkedList-in son elementini(node) silmek
+        public Node DeleteFirstNode()
+        {
+            Node temp = head;
+
+            if (length == 0)
+            {
+                return null;
+            }
+
+            if (length == 1)
+            {
+                head = null;
+                tail = null;
+                length--;
+                return temp;
+            }
+            else
+            {
+                head = head.next;
+                head.prev = null;
+                temp.next = null;
+                length--;
+            }
+            return temp;
+        }
+
+        //DoublyLinkedList-de mueyyen bir index-deki elemnti(nodu) tapmaq
+        public Node GetNode(int index)
+        {
+            Node temp = head;
+
+            if (index >= 0 && index < length)
+            {
+                if (index < length / 2)
+                {
+                    for (int i = 0; i < index; i++)
+                    {
+                        temp = temp.next;
+                    }
+                    return temp;
+                }
+                else
+                {
+                    temp = tail;
+
+                    for (int i = length - 1; i > index; i--)
+                    {
+                        temp = temp.prev;
+                    }
+                    return temp;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        //DoublyLinkedList-de mueyyen bir index-deki data-ni deyisdirmek
+        public void SetNode(int index, int data)
+        {
+            Node temp = GetNode(index);
+
+            if (temp != null)
+            {
+                temp.data = data;
+            }
+        }
+
+        //DoublyLinkedList-de mueyyen bir inex-e element(node) elave etmek
+        public bool InsertNode(int index, int data)
+        {
+            if (index < 0 || index >= length)
+            {
+                return false;
+            }
+            else
+            {
+                if (index == 0)
+                {
+                    AddFirst(data);
+                    return true;
+                }
+                if (index == length - 1)
+                {
+                    AppendList(data);
+                    return true;
+                }
+
+                Node newNode = new Node(data);
+                Node prevNode = GetNode(index - 1);
+                Node nextNode = GetNode(index);
+
+                newNode.prev = prevNode;
+                newNode.next = nextNode;
+                prevNode.next = newNode;
+                nextNode.prev = prevNode;
+                length++;
+                return true;
+            }
+        }
+
+        //DoublyLinkedList-de mueyyen bir index-deki elementi(node) silmek
+        public Node DeleteNode(int index)
+        {
+            Node deleteNode = null;
+            if (index >= 0 && index < length)
+            {
+                if (index == 0)
+                {
+                    DeleteFirstNode();
+                }
+
+                else if (index == length - 1)
+                {
+                    DeleteLastNode();
+                }
+                else
+                {
+                    deleteNode = GetNode(index);
+                    deleteNode.next.prev = deleteNode.prev;
+                    deleteNode.prev.next = deleteNode.next;
+                    deleteNode.next = null;
+                    deleteNode.prev = null;
+                    length--;
+                }
+            }
+            else
+            {
+                return null;
+            }
+            return deleteNode;
+        }
+
+
+        //DoublyLinkedList elementlerini console-a yazdirmaq
+        public void PrintList()
+        {
+            Node temp = head;
+            Console.WriteLine("DoublyLinkedList: ");
+            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+
+            while (temp != null)
+            {
+                Console.WriteLine(temp.data);
+                temp = temp.next;
+            }
+            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+        }
+
+        //DoublyLinkedList-in Head ini console-a yazdirmaq
+        public void PrintHead()
+        {
+            if (head != null)
+            {
+                Console.WriteLine("Head: " + head.data);
+            }
+        }
+
+        //DoublyLinkedList-in Tail-ini console-a yazdirmaq
+        public void PrintTail()
+        {
+            if (tail != null)
+            {
+                Console.WriteLine("Tail: " + tail.data);
+            }
+        }
+
+        //DoublyLinkedList-in Lnegth(Uzunlugunu) console-a yazdirmaq
+        public void PrintLength()
+        {
+            Console.WriteLine("Length: " + length);
+        }
+    }
+}
